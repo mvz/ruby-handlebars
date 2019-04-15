@@ -21,10 +21,10 @@ module Handlebars
     rule(:eof)         { any.absent? }
     rule(:template_content) {
       (
+        nocurly           | # Not a curly
         ocurly >> nocurly | # Opening curly that doesn't start a {{}}
-        ocurly >> eof     | # Opening curly that doesn't start a {{}} because it's the end
         ccurly            | # Closing curly that is not inside a {{}}
-        nocurly
+        ocurly >> eof       # Opening curly that doesn't start a {{}} because it's the end
       ).repeat(1).as(:template_content) }
 
     rule(:replacement) { docurly >> space? >> path.as(:replaced_item) >> space? >> dccurly}
