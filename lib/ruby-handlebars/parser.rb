@@ -27,9 +27,6 @@ module Handlebars
         ocurly >> eof       # Opening curly that doesn't start a {{}} because it's the end
       ).repeat(1).as(:template_content) }
 
-    rule(:replacement) { docurly >> space? >> path.as(:replaced_item) >> space? >> dccurly}
-    rule(:safe_replacement) { ocurly >> replacement >> ccurly }
-
     rule(:sq_string)   { match("'") >> match("[^']").repeat.maybe.as(:str_content) >> match("'") }
     rule(:dq_string)   { match('"') >> match('[^"]').repeat.maybe.as(:str_content) >> match('"') }
     rule(:string)      { sq_string | dq_string }
@@ -37,7 +34,7 @@ module Handlebars
     rule(:parameter)   { (path | string).as(:parameter_name) }
     rule(:parameters)  { parameter >> (space >> parameter).repeat }
 
-    rule(:unsafe_helper) { docurly >> space? >> identifier.as(:helper_name) >> (space? >> parameters.as(:parameters)).maybe >> space? >> dccurly}
+    rule(:unsafe_helper) { docurly >> space? >> path.as(:helper_name) >> (space? >> parameters.as(:parameters)).maybe >> space? >> dccurly}
     rule(:safe_helper) { ocurly >> helper >> ccurly }
 
     rule(:helper) { unsafe_helper | safe_helper }
@@ -66,7 +63,7 @@ module Handlebars
       dccurly
     }
 
-    rule(:block) { (template_content | replacement | safe_replacement | helper | partial | block_helper ).repeat.as(:block_items) }
+    rule(:block) { (template_content | helper | partial | block_helper ).repeat.as(:block_items) }
 
     root :block
   end
