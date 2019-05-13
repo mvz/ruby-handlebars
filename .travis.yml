@@ -3,5 +3,3 @@ rvm:
   - 2.3.7
   - 2.4.5
   - 2.5.3
-
-script: "./bin/travis_script.sh"

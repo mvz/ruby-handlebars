@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('colorize', ['~> 0.7', '>= 0.7.5'])
   s.add_runtime_dependency('parslet', ['~> 1.6', '>= 1.6.2'])
 
-  s.add_development_dependency('codeclimate-test-reporter', ['~> 0.4', '>= 0.4.6'])
   s.add_development_dependency('pry', ['~> 0.10', '>= 0.10.1'])
   s.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.9.1'])
   s.add_development_dependency('rake', ['~> 12.0'])
