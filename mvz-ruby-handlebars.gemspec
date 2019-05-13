@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require File.join(File.dirname(__FILE__), 'lib/ruby-handlebars/version.rb')
+
 Gem::Specification.new do |s|
   s.name = 'mvz-ruby-handlebars'
-  s.version = '0.0.6'
+  s.version = Handlebars::VERSION
 
   s.rubygems_version = '>= 1.6.1'
   s.required_ruby_version = '>= 2.4'
@@ -14,14 +16,12 @@ Gem::Specification.new do |s|
     'LICENSE',
     'README.md'
   ]
-  s.files = [
-    'lib/ruby-handlebars.rb',
-    'lib/ruby-handlebars/context.rb',
-    'lib/ruby-handlebars/helper.rb',
-    'lib/ruby-handlebars/parser.rb',
-    'lib/ruby-handlebars/template.rb',
-    'lib/ruby-handlebars/tree.rb'
-  ]
+
+  s.files = Dir['{lib,spec}/**/*',
+                '*.md',
+                'Gemfile',
+                'Rakefile',
+                'LICENSE'] & `git ls-files -z`.split("\0")
 
   s.homepage = 'https://github.com/mvz/ruby-handlebars'
   s.rubygems_version = '3.0.3'

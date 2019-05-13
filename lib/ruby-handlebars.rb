@@ -1,3 +1,4 @@
+require_relative 'ruby-handlebars/version'
 require_relative 'ruby-handlebars/helper'
 require_relative 'ruby-handlebars/context'
 require_relative 'ruby-handlebars/parser'
