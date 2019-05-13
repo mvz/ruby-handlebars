@@ -8,3 +8,5 @@ rvm:
 branches:
   only:
     - master
+
+cache: bundler
