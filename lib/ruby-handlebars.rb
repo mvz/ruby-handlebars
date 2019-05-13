@@ -1,16 +1,15 @@
-require_relative 'ruby-handlebars/parser'
-require_relative 'ruby-handlebars/tree'
-require_relative 'ruby-handlebars/template'
 require_relative 'ruby-handlebars/helper'
+require_relative 'ruby-handlebars/context'
+require_relative 'ruby-handlebars/parser'
+require_relative 'ruby-handlebars/template'
+require_relative 'ruby-handlebars/tree'
 
 module Handlebars
   class Handlebars
-    include Context
-
     def initialize
       @helpers = {}
       @partials = {}
-      @locals = {}
+
       register_default_helpers
     end
 
@@ -32,10 +31,6 @@ module Handlebars
 
     def get_partial(name)
       @partials[name.to_s]
-    end
-
-    def set_context(ctx)
-      @data = ctx
     end
 
     private
