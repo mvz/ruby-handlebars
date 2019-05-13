@@ -4,7 +4,9 @@ Gem::Specification.new do |s|
   s.name = 'mvz-ruby-handlebars'
   s.version = '0.0.6'
 
-  s.required_rubygems_version = Gem::Requirement.new('>= 0')
+  s.rubygems_version = '>= 1.6.1'
+  s.required_ruby_version = '>= 2.4'
+
   s.authors = ['Vincent Pretre', 'Hiptest R&D', 'Matijs van Zuijlen']
   s.date = '2019-05-13'
   s.email = 'matijs@matijs.net'
