@@ -1,3 +1,5 @@
+require 'parslet'
+
 module Handlebars
   module Tree
     class TreeItem < Struct
@@ -44,7 +46,7 @@ module Handlebars
 
     class Partial < TreeItem.new(:partial_name)
       def _eval(context)
-        context.get_partial(partial_name.to_s).call
+        context.get_partial(partial_name.to_s).call_with_context(context)
       end
     end
 
