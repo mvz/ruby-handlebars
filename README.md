@@ -1,12 +1,11 @@
 ruby-handlebars
 ===============
 
-[![Build Status](https://travis-ci.org/vincent-psarga/ruby-handlebars.svg?branch=master)](https://travis-ci.org/vincent-psarga/ruby-handlebars)
-[![Code Climate](https://codeclimate.com/github/vincent-psarga/ruby-handlebars/badges/gpa.svg)](https://codeclimate.com/github/vincent-psarga/ruby-handlebars)
-[![Test Coverage](https://codeclimate.com/github/vincent-psarga/ruby-handlebars/badges/coverage.svg)](https://codeclimate.com/github/vincent-psarga/ruby-handlebars)
+[![Build Status](https://travis-ci.org/mvz/ruby-handlebars.svg?branch=master)](https://travis-ci.org/mvz/ruby-handlebars)
 
 Pure Ruby library for [Handlebars](http://handlebarsjs.com/) template system.
-The main goal of this library is to simplify the use of Ruby and Handlebars on Windows machine. If you do not have any need of working on Windows, take a look at [handlebars.rb](https://github.com/cowboyd/handlebars.rb) that uses the real Handlebars library.
+This should become an alternative for using the Handlebars javascript library via
+[handlebars.rb](https://github.com/cowboyd/handlebars.rb).
 
 Installing
 ----------
@@ -14,7 +13,7 @@ Installing
 Simply run:
 
 ```shell
-gem install ruby-handlebars
+gem install mvz-ruby-handlebars
 ```
 
 No need for libv8, ruby-racer or any JS related tool.
@@ -113,5 +112,4 @@ This gem does not reuse the real Handlebars code (the JS one) and not everything
 Aknowledgements
 ---------------
 
-This gem would simply not exist if the handlebars team was not here. Thanks a lot for this awesome templating system.
-Thanks a lot to @cowboyd for the [handlebars.rb](https://github.com/cowboyd/handlebars.rb) gem. We used it for a while and it's great (and as told at the beginning of the README, if you do not need any Windows support, use handlebars.rb instead ;) )
+This is a fork of the [ruby-handlebars]("https://github.com/vincent-psarga/ruby-handlebars") gem, which sadly seems unmaintained.

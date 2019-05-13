@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "ruby-handlebars"
-  gem.homepage = "https://github.com/vincent-psarga/ruby-handlebars"
+  gem.name = "mvz-ruby-handlebars"
+  gem.homepage = "https://github.com/mvz/ruby-handlebars"
   gem.summary = "Pure Ruby library for Handlebars templates "
-  gem.email = "v.pretre@hiptest.net"
-  gem.authors = ["Vincent Pretre", "Hiptest R&D"]
+  gem.email = "matijs@matijs.net"
+  gem.authors = ["Vincent Pretre", "Hiptest R&D", "Matijs van Zuijlen"]
 
   gem.executables = []
   gem.files = `git ls-files -- lib/*`.split("\n")
