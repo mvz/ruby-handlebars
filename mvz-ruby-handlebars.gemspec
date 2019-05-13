@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.rubygems_version = '3.0.3'
   s.summary = 'Pure Ruby library for Handlebars templates'
 
-  s.add_runtime_dependency('colorize', ['~> 0.7', '>= 0.7.5'])
   s.add_runtime_dependency('parslet', ['~> 1.6', '>= 1.6.2'])
 
   s.add_development_dependency('pry', ['~> 0.10', '>= 0.10.1'])
