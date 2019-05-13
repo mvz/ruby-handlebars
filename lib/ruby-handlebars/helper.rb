@@ -22,7 +22,7 @@ module Handlebars
       else_found = false
 
       block.each do |item|
-        if item.is_a?(Tree::Replacement) && item.is_else?
+        if item.is_a?(Tree::Helper) && item.is_else?
           receiver = inverse_block
           else_found = true
           next
