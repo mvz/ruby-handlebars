@@ -27,13 +27,13 @@ Gem::Specification.new do |s|
   s.rubygems_version = '3.0.3'
   s.summary = 'Pure Ruby library for Handlebars templates'
 
-  s.add_runtime_dependency('parslet', ['~> 1.6', '>= 1.6.2'])
+  s.add_runtime_dependency('parslet', ['~> 2.0'])
 
-  s.add_development_dependency('pry', ['~> 0.10', '>= 0.10.1'])
-  s.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.9.1'])
-  s.add_development_dependency('rake', ['~> 12.0'])
-  s.add_development_dependency('rspec', ['>= 3.1.0', '~> 3.1'])
-  s.add_development_dependency('rspec-mocks', ['~> 3.1', '>= 3.1.3'])
+  s.add_development_dependency('pry', ['~> 0.13.1'])
+  s.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.12'])
+  s.add_development_dependency('rake', ['~> 13.0'])
+  s.add_development_dependency('rspec', ['~> 3.10'])
+  s.add_development_dependency('rspec-mocks', ['~> 3.10'])
 
   s.require_paths = ['lib']
 end
