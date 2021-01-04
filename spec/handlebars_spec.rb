@@ -1,5 +1,7 @@
 require_relative 'spec_helper'
 require_relative '../lib/ruby-handlebars'
+require_relative '../lib/ruby-handlebars/escapers/dummy_escaper'
+
 
 describe Handlebars::Handlebars do
   let(:hbs) {Handlebars::Handlebars.new}
@@ -15,6 +17,18 @@ describe Handlebars::Handlebars do
 
     it 'a simple replacement' do
       expect(evaluate('Hello {{name}}', {name: 'world'})).to eq('Hello world')
+    end
+
+    it 'a double braces replacement with unsafe characters' do
+      expect(evaluate('Hello {{name}}', {name: '<"\'>&'})).to eq('Hello &lt;&quot;&#39;&gt;&amp;')
+    end
+
+    it 'a double braces replacement with nil' do
+      expect(evaluate('Hello {{name}}', {name: nil})).to eq('Hello ')
+    end
+
+    it 'a triple braces replacement with unsafe characters' do
+      expect(evaluate('Hello {{{name}}}', {name: '<"\'>&'})).to eq('Hello <"\'>&')
     end
 
     it 'allows values specified by methods' do
@@ -37,15 +51,50 @@ describe Handlebars::Handlebars do
       expect(evaluate('Hello {{each}}', {each: 'world'})).to eq('Hello world')
     end
 
+    it 'handles a parameter with a dash' do
+      expect(evaluate('Hello {{first-name}}', double("first-name": 'world'))).to eq('Hello world')
+    end
+
     context 'partials' do
       it 'simple' do
         hbs.register_partial('plic', "Plic")
         expect(evaluate("Hello {{> plic}}")).to eq("Hello Plic")
       end
 
+      it 'using a name with a slash' do
+        hbs.register_partial('parent/plic', "Plic")
+        expect(evaluate("Hello {{> parent/plic}}")).to eq("Hello Plic")
+      end
+
+      it 'using a name that begins with a slash' do
+        hbs.register_partial('/parent/plic', "Plic")
+        expect(evaluate("Hello {{> /parent/plic}}")).to eq("Hello Plic")
+      end
+
       it 'using context' do
         hbs.register_partial('brackets', "[{{name}}]")
         expect(evaluate("Hello {{> brackets}}", {name: 'world'})).to eq("Hello [world]")
+      end
+      
+      it 'with a string argument' do
+        hbs.register_partial('with_args', "[{{name}}]")
+        expect(evaluate("Hello {{> with_args name='jon'}}")).to eq("Hello [jon]")
+      end
+
+      it 'with string arguments' do
+        hbs.register_partial('with_args', "[{{fname}} {{lname}}]")
+        expect(evaluate("Hello {{> with_args fname='jon' lname='doe'}}")).to eq("Hello [jon doe]")
+      end
+
+      it 'with variables in arguments' do
+         hbs.register_partial('with_args', "[{{fname}} {{lname}}]")
+        expect(evaluate("Hello {{> with_args fname='jon' lname=last_name}}", {last_name: 'doe'})).to eq("Hello [jon doe]")
+      end
+
+      it 'with a helper as an argument' do
+        hbs.register_helper('wrap_parens') {|context, value| "(#{value})"}
+        hbs.register_partial('with_args', "[{{fname}} {{lname}}]")
+        expect(evaluate("Hello {{> with_args fname='jon' lname=(wrap_parens 'doe')}}")).to eq("Hello [jon (doe)]")
       end
     end
 
@@ -64,7 +113,22 @@ describe Handlebars::Handlebars do
       it 'with multiple arguments, including strings' do
         hbs.register_helper('add') {|context, left, op, right| "#{left} #{op} #{right}"}
 
-        expect(evaluate("{{add left '&' right}}", {left: 'Law', right: 'Order'})).to eq("Law & Order")
+        expect(evaluate("{{add left '&' right}}", {left: 'Law', right: 'Order'})).to eq("Law &amp; Order")
+        expect(evaluate("{{{add left '&' right}}}", {left: 'Law', right: 'Order'})).to eq("Law & Order")
+      end
+
+      it 'with an empty string argument' do
+        hbs.register_helper('noah') {|context, value| value.to_s.gsub(/a/, '')}
+
+        expect(evaluate("hey{{noah ''}}there", {})).to eq("heythere")
+      end
+
+      it 'with helpers as arguments' do
+        hbs.register_helper('wrap_parens') {|context, value| "(#{value})"}
+        hbs.register_helper('wrap_dashes') {|context, value| "-#{value}-"}
+
+        expect(evaluate('{{wrap_dashes (wrap_parens "hello")}}', {})).to eq("-(hello)-")
+        expect(evaluate('{{wrap_dashes (wrap_parens world)}}', {world: "world"})).to eq("-(world)-")
       end
 
       it 'with an empty string argument' do
@@ -119,212 +183,94 @@ describe Handlebars::Handlebars do
         data = {company: {people: ['a', 'b', 'c']}}
         expect(evaluate("{{#each company.people}}{{{this}}}{{/each}}", data)).to eq('abc')
       end
+
+      it 'a else keyword out of a helper will raise an error' do
+        expect { evaluate('My {{ else }} template') }.to raise_exception(Parslet::ParseFailed)
+      end
+
+      it '"else" can be part of a path' do
+        expect(evaluate('My {{ something.else }} template', { something: { else: 'awesome' }})).to eq('My awesome template')
+      end
     end
 
-    context 'default helpers' do
-      context 'if' do
-        it 'without else' do
-          template = [
-            "{{#if condition}}",
-            "  Show something",
-            "{{/if}}"
-          ].join("\n")
-          expect(evaluate(template, {condition: true})).to eq("\n  Show something\n")
-          expect(evaluate(template, {condition: false})).to eq("")
+    context 'as_helpers' do
+      it 'can be used to have names parameters inside the block' do
+        hbs.register_as_helper('test_with') do |context, value, name, block|
+          context.with_temporary_context(name => value) do
+            block.fn(context)
+          end
         end
 
-        it 'with an else' do
-          template = [
-            "{{#if condition}}",
-            "  Show something",
-            "{{ else }}",
-            "  Do not show something",
-            "{{/if}}"
-          ].join("\n")
-          expect(evaluate(template, {condition: true})).to eq("\n  Show something\n")
-          expect(evaluate(template, {condition: false})).to eq("\n  Do not show something\n")
+        expect(evaluate("{{#test_with name as |duck|}}Duck name is: {{duck}}{{/test_with}}", {name: "Dewey"})).to eq('Duck name is: Dewey')
+      end
+
+      it 'can have multiple "as" parameters' do
+        hbs.register_as_helper('test_with') do |context, value1, value2, name1, name2, block|
+          mapping = {}
+          mapping[name1] = value1
+          mapping[name2] = value2
+
+          context.with_temporary_context(mapping) do
+            block.fn(context)
+          end
         end
 
-        it 'imbricated ifs' do
-          template = [
-            "{{#if first_condition}}",
-            "  {{#if second_condition}}",
-            "    Case 1",
-            "  {{else}}",
-            "    Case 2",
-            "  {{/if}}",
-            "{{else}}",
-            "  {{#if second_condition}}",
-            "    Case 3",
-            "  {{else}}",
-            "    Case 4",
-            "  {{/if}}",
-            "{{/if}}"
-          ].join("\n")
+        expect(evaluate("{{#test_with name1 name2 as |duck1 duck2|}}Duck names are {{duck1}} and {{duck2}}{{/test_with}}", {name1: "Huey", name2: "Dewey"})).to eq('Duck names are Huey and Dewey')
+      end
+    end
+  end
 
-          expect(evaluate(template, {first_condition: true, second_condition: true}).strip).to eq("Case 1")
-          expect(evaluate(template, {first_condition: true, second_condition: false}).strip).to eq("Case 2")
-          expect(evaluate(template, {first_condition: false, second_condition: true}).strip).to eq("Case 3")
-          expect(evaluate(template, {first_condition: false, second_condition: false}).strip).to eq("Case 4")
+  context 'escaping characters' do
+    let(:escaper) { nil }
+    let(:name) { '<"\'>&' }
+    let(:replacement_escaped) { evaluate('Hello {{ name }}', {name: name}) }
+    let(:helper_replacement_escaped) {
+      hbs.register_helper('wrap_parens') {|context, value| "(#{value})"}
+      evaluate('Hello {{wrap_parens name}}', {name: name})
+    }
+
+    before do
+      hbs.set_escaper(escaper)
+    end
+
+    context 'default escaper' do
+      it 'escapes HTML characters in simple replacements' do
+        expect(replacement_escaped).to eq('Hello &lt;&quot;&#39;&gt;&amp;')
+      end
+
+      it 'escapes HTML characters in helpers' do
+        expect(helper_replacement_escaped).to eq('Hello (&lt;&quot;&#39;&gt;&amp;)')
+      end
+    end
+
+    context 'DummyEscaper' do
+      let(:escaper) { Handlebars::Escapers::DummyEscaper }
+
+      it 'escapes nothing' do
+        expect(replacement_escaped).to eq('Hello <"\'>&')
+      end
+
+      it 'escapes nothing in helpers' do
+        expect(helper_replacement_escaped).to eq('Hello (<"\'>&)')
+      end
+    end
+
+    context 'custom escaper' do
+      class VowelEscaper
+        def self.escape(value)
+          value.gsub(/([aeiuo])/, '-\1')
         end
       end
 
-      context 'each' do
-        let(:ducks) {[{name: 'Huey'}, {name: 'Dewey'}, {name: 'Louis'}]}
+      let(:escaper) { VowelEscaper }
+      let(:name) { 'Her Serene Highness' }
 
-        it 'simple case' do
-          template = [
-            "<ul>",
-            "{{#each items}}  <li>{{this.name}}</li>",
-            "{{/each}}</ul>"
-          ].join("\n")
+      it 'applies the escaping' do
+        expect(replacement_escaped).to eq('Hello H-er S-er-en-e H-ighn-ess')
+      end
 
-          data = {items: ducks}
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "  <li>Huey</li>",
-            "  <li>Dewey</li>",
-            "  <li>Louis</li>",
-            "</ul>"
-          ].join("\n"))
-
-          data = {items: []}
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "</ul>"
-          ].join("\n"))
-        end
-
-        it 'considers not found items as an empty list and does not raise an error' do
-          template = [
-            "<ul>",
-            "{{#each stuff}}  <li>{{this.name}}</li>",
-            "{{/each}}</ul>"
-          ].join("\n")
-
-          expect(evaluate(template, {})).to eq([
-            "<ul>",
-            "</ul>"
-          ].join("\n"))
-        end
-
-        it 'considers not found items as an empty list and uses else block if provided' do
-          template = [
-            "<ul>",
-            "{{#each stuff}}  <li>{{this.name}}</li>",
-            "{{else}}  <li>No stuff found....</li>",
-            "{{/each}}</ul>"
-          ].join("\n")
-
-          expect(evaluate(template, {})).to eq([
-            "<ul>",
-            "  <li>No stuff found....</li>",
-            "</ul>"
-          ].join("\n"))
-        end
-
-        it 'works with non-hash data' do
-          template = [
-            "<ul>",
-            "{{#each items}}  <li>{{this.name}}</li>",
-            "{{/each}}</ul>"
-          ].join("\n")
-
-          data = double(items: ducks)
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "  <li>Huey</li>",
-            "  <li>Dewey</li>",
-            "  <li>Louis</li>",
-            "</ul>"
-          ].join("\n"))
-
-          data = {items: []}
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "</ul>"
-          ].join("\n"))
-        end
-
-        it 'using an else statement' do
-          template = [
-            "<ul>",
-            "{{#each items}}  <li>{{this.name}}</li>",
-            "{{else}}  <li>No ducks to display</li>",
-            "{{/each}}</ul>"
-          ].join("\n")
-
-          data = {items: ducks}
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "  <li>Huey</li>",
-            "  <li>Dewey</li>",
-            "  <li>Louis</li>",
-            "</ul>"
-          ].join("\n"))
-
-          data = {items: []}
-          expect(evaluate(template, data)).to eq([
-            "<ul>",
-            "  <li>No ducks to display</li>",
-            "</ul>"
-          ].join("\n"))
-        end
-
-        it 'imbricated' do
-          data = {people: [
-            {
-              name: 'Huey',
-              email: 'huey@junior-woodchucks.example.com',
-              phones: ['1234', '5678'],
-            },
-            {
-              name: 'Dewey',
-              email: 'dewey@junior-woodchucks.example.com',
-              phones: ['4321'],
-            }
-          ]}
-
-          template = [
-            "People:",
-            "<ul>",
-            "  {{#each people}}",
-            "  <li>",
-            "    <ul>",
-            "      <li>Name: {{this.name}}</li>",
-            "      <li>Phones: {{#each this.phones}} {{this}} {{/each}}</li>",
-            "      <li>email: {{this.email}}</li>",
-            "    </ul>",
-            "  </li>",
-            "  {{else}}",
-            "  <li>No one to display</li>",
-            "  {{/each}}",
-            "</ul>"
-          ].join("\n")
-
-          expect(evaluate(template, data)).to eq([
-            "People:",
-            "<ul>",
-            "  ",
-            "  <li>",
-            "    <ul>",
-            "      <li>Name: Huey</li>",
-            "      <li>Phones:  1234  5678 </li>",
-            "      <li>email: huey@junior-woodchucks.example.com</li>",
-            "    </ul>",
-            "  </li>",
-            "  ",
-            "  <li>",
-            "    <ul>",
-            "      <li>Name: Dewey</li>",
-            "      <li>Phones:  4321 </li>",
-            "      <li>email: dewey@junior-woodchucks.example.com</li>",
-            "    </ul>",
-            "  </li>",
-            "  ",
-            "</ul>"
-          ].join("\n"))
-        end
+      it 'applies the escaping in helpers' do
+        expect(helper_replacement_escaped).to eq('Hello (H-er S-er-en-e H-ighn-ess)')
       end
     end
   end
