@@ -1,17 +1,23 @@
 require_relative 'ruby-handlebars/version'
-require_relative 'ruby-handlebars/helper'
 require_relative 'ruby-handlebars/context'
 require_relative 'ruby-handlebars/parser'
-require_relative 'ruby-handlebars/template'
 require_relative 'ruby-handlebars/tree'
+require_relative 'ruby-handlebars/template'
+require_relative 'ruby-handlebars/helper'
+require_relative 'ruby-handlebars/helpers/register_default_helpers'
+require_relative 'ruby-handlebars/escapers/html_escaper'
 
 module Handlebars
   class Handlebars
+    attr_reader :escaper
+
     def initialize
+      @as_helpers = {}
       @helpers = {}
       @partials = {}
 
       register_default_helpers
+      set_escaper
     end
 
     def compile(template)
@@ -22,8 +28,16 @@ module Handlebars
       @helpers[name.to_s] = Helper.new(self, fn)
     end
 
+    def register_as_helper(name, &fn)
+      @as_helpers[name.to_s] = Helper.new(self, fn)
+    end
+
     def get_helper(name)
       @helpers[name.to_s]
+    end
+
+    def get_as_helper(name)
+      @as_helpers[name.to_s]
     end
 
     def register_partial(name, content)
@@ -32,6 +46,10 @@ module Handlebars
 
     def get_partial(name)
       @partials[name.to_s]
+    end
+
+    def set_escaper(escaper = nil)
+      @escaper = escaper || Escapers::HTMLEscaper
     end
 
     private
@@ -44,42 +62,7 @@ module Handlebars
     end
 
     def register_default_helpers
-      register_if_helper
-      register_each_helper
-    end
-
-    def register_if_helper
-      register_helper('if') do |context, condition, block, else_block|
-        condition = !condition.empty? if condition.respond_to?(:empty?)
-
-        if condition
-          block.fn(context)
-        elsif else_block
-          else_block.fn(context)
-        else
-          ""
-        end
-      end
-    end
-
-    def register_each_helper
-      register_helper('each') do |context, items, block, else_block|
-        current_this = context.get('this')
-
-        if (items.nil? || items.empty?)
-          if else_block
-            result = else_block.fn(context)
-          end
-        else
-          result = items.map do |item|
-            context.add_item(:this, item)
-            block.fn(context)
-          end.join('')
-        end
-
-        context.add_item(:this, current_this)
-        result
-      end
+      Helpers.register_default_helpers(self)
     end
   end
 end

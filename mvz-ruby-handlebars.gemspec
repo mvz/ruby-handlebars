@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake', ['~> 13.0'])
   s.add_development_dependency('rspec', ['~> 3.10'])
   s.add_development_dependency('rspec-mocks', ['~> 3.10'])
+  s.add_development_dependency('simplecov')
 
   s.require_paths = ['lib']
 end

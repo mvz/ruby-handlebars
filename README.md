@@ -40,6 +40,13 @@ hbs.compile("Hello {{> full_name}}").call({person: {first_name: 'Pinkie', last_n
 # Gives: "Hello Pinkie Pie"
 ```
 
+Partials support parameters:
+```ruby
+hbs.register_partial('full_name', "{{fname}} {{lname}}")
+hbs.compile("Hello {{> full_name fname='jon' lname='doe'}}")
+# Gives: "Hello jon doe"
+```
+
 You can also register inline helpers:
 
 ```ruby
@@ -81,22 +88,59 @@ hbs.compile(template).call({description: my_description})
 # Output will depend on the validity of the 'my_description' variable
 ```
 
-Two default helpers are provided: ``each`` and ``if``. It is not yet possible to name the current item in an each loop and ``this`` must be used to reference it.
+Default helpers:
+----------------
+
+Three default helpers are provided: ``each``, ``if`` and ``unless``.
+
+The each helper let you walk through a list. You can either use the basic notation and referencing the current item as ``this``:
+
+```
+  {{#each items}}
+    {{{ this }}}
+  {{else}}
+    No items
+  {{/each}}
+```
+
+or the "as |name|" notation:
+
+```
+  {{#each items as |item| }}
+    {{{ item }}}
+  {{else}}
+    No items
+  {{/each}}
+```
+
+The ``if`` helper can be used to write conditionnal templates:
+
+```
+  {{#if my_condition}}
+    It's ok
+  {{else}}
+    or maybe not
+  {{/if}}
+```
+
+The ``unless`` helper works the opposite way to ``if``:
+
+```
+  {{#unless my_condition}}
+    It's not ok
+  {{else}}
+    or maybe it is
+  {{/unless}}
+```
+
+Currently, if you call an unknown helper, it will raise an exception. You can override that by registering your own version of the ``helperMissing`` helper. Note that only the name of the missing helper will be provided.
+
+For example:
 
 ```ruby
-template = [
-  "{{#each items}}",
-  "  {{{ this }}}",
-  "{{else}}",
-  "  No items",
-  "{{/each}}",
-  "",
-  "{{#if my_condition}}",
-  "  It's ok",
-  "{{else}}",
-  "  or maybe not",
-  "{{/if}}",
-].join("\n")
+hbs.register_helper('helperMissing') do |context, name|
+  puts "No helper found with name #{name}"
+end
 ```
 
 Limitations and roadmap
@@ -104,12 +148,10 @@ Limitations and roadmap
 
 This gem does not reuse the real Handlebars code (the JS one) and not everything is handled yet (but it will be someday ;) ):
 
- - there is no escaping, all strings are considered as safe (so ``{{{ my_var }}}`` and ``{{ my_var }}``) will output the same thing
  - the parser is not fully tested yet, it may complain with spaces ...
- - curly bracket are __not__ usable in the template content yet. one workaround is to create simple helpers to generate them
  - parsing errors are, well, not helpful at all
 
 Aknowledgements
 ---------------
 
-This is a fork of the [ruby-handlebars]("https://github.com/vincent-psarga/ruby-handlebars") gem, which sadly seems unmaintained.
+This is a fork of the [ruby-handlebars]("https://github.com/vincent-psarga/ruby-handlebars") gem. Eventually I hope to have all my changes accepted upstream so I can abandon this fork.
