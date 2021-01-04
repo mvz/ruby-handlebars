@@ -21,8 +21,16 @@ module Handlebars
       current
     end
 
+    def escaper
+      @hbs.escaper
+    end
+
     def get_helper(name)
       @hbs.get_helper(name)
+    end
+
+    def get_as_helper(name)
+      @hbs.get_as_helper(name)
     end
 
     def get_partial(name)
