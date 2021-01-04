@@ -14,6 +14,20 @@ module Handlebars
       end
     end
 
+    class Replacement < TreeItem.new(:item)
+      def _eval(context)
+        if context.get_helper(item.to_s).nil?
+          context.get(item.to_s)
+        else
+          context.get_helper(item.to_s).apply(context)
+        end
+      end
+
+      def is_else?
+        item.to_s == 'else'
+      end
+    end
+
     class String < TreeItem.new(:content)
       def _eval(context)
         return content
@@ -64,6 +78,7 @@ module Handlebars
 
   class Transform < Parslet::Transform
     rule(template_content: simple(:content)) {Tree::TemplateContent.new(content)}
+    rule(replaced_item: simple(:item)) {Tree::Replacement.new(item)}
     rule(str_content: simple(:content)) {Tree::String.new(content)}
     rule(parameter_name: simple(:name)) {Tree::Parameter.new(name)}
 
