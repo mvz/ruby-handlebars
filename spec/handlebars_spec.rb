@@ -33,6 +33,10 @@ describe Handlebars::Handlebars do
       expect(evaluate('My simple template: {{person.name}}', {person: {name: 'Another name'}})).to eq('My simple template: Another name')
     end
 
+    it 'prefers a replacement even if its name matches a helper' do
+      expect(evaluate('Hello {{each}}', {each: 'world'})).to eq('Hello world')
+    end
+
     context 'partials' do
       it 'simple' do
         hbs.register_partial('plic', "Plic")

@@ -7,6 +7,10 @@ module Handlebars
       @fn = fn
     end
 
+    def arity
+      @fn.arity
+    end
+
     def apply(context, arguments = [], block = [])
       arguments = [arguments] unless arguments.is_a? Array
       args = [context] + arguments.map {|arg| arg.eval(context)} + split_block(block || [])
