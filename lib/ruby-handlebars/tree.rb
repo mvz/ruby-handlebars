@@ -16,10 +16,11 @@ module Handlebars
 
     class Replacement < TreeItem.new(:item)
       def _eval(context)
-        if context.get_helper(item.to_s).nil?
-          context.get(item.to_s)
+        helper = context.get_helper(item.to_s)
+        if helper && helper.arity == 1
+          helper.apply(context)
         else
-          context.get_helper(item.to_s).apply(context)
+          context.get(item.to_s)
         end
       end
 
