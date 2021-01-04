@@ -46,15 +46,7 @@ module Handlebars
 
     class Helper < TreeItem.new(:name, :parameters, :block)
       def _eval(context)
-        if context.get_helper(name.to_s).nil?
-          context.get(name.to_s)
-        else
-          context.get_helper(name.to_s).apply(context, parameters, block)
-        end
-      end
-
-      def is_else?
-        name.to_s == 'else'
+        context.get_helper(name.to_s).apply(context, parameters, block)
       end
     end
 
@@ -81,12 +73,6 @@ module Handlebars
     rule(replaced_item: simple(:item)) {Tree::Replacement.new(item)}
     rule(str_content: simple(:content)) {Tree::String.new(content)}
     rule(parameter_name: simple(:name)) {Tree::Parameter.new(name)}
-
-    rule(
-      helper_name: simple(:name)
-    ) {
-      Tree::Helper.new(name, [])
-    }
 
     rule(
       helper_name: simple(:name),

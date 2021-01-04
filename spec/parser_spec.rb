@@ -16,22 +16,22 @@ describe Handlebars::Parser do
     it 'simple replacements' do
       expect(parser.parse('{{plic}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
       expect(parser.parse('{{ plic}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
       expect(parser.parse('{{plic }}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
       expect(parser.parse('{{ plic }}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
     end
@@ -39,25 +39,25 @@ describe Handlebars::Parser do
     it 'safe strings' do
       expect(parser.parse('{{{plic}}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
 
       expect(parser.parse('{{{ plic}}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
 
       expect(parser.parse('{{{plic }}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
 
       expect(parser.parse('{{{ plic }}}')).to eq({
         block_items: [
-          {helper_name: 'plic'}
+          {replaced_item: 'plic'}
         ]
       })
 
@@ -204,7 +204,7 @@ describe Handlebars::Parser do
               parameters: {parameter_name: 'something'},
               block_items: [
                 {template_content: 'Ok'},
-                {helper_name: 'else'},
+                {replaced_item: 'else'},
                 {template_content: 'not ok'}
               ]
             }
@@ -243,7 +243,7 @@ describe Handlebars::Parser do
               parameters: {parameter_name: 'people'},
               block_items: [
                 {template_content: ' '},
-                {helper_name: 'this.name'},
+                {replaced_item: 'this.name'},
                 {template_content: ' '}
               ]
             }
@@ -259,14 +259,14 @@ describe Handlebars::Parser do
               parameters: {parameter_name: 'people'},
               block_items: [
                 {template_content: ' '},
-                {helper_name: 'this.name'},
+                {replaced_item: 'this.name'},
                 {template_content: ' <ul> '},
                 {
                   helper_name: 'each',
                   parameters: {parameter_name: 'this.contact'},
                   block_items: [
                     {template_content: ' <li>'},
-                    {helper_name: 'this'},
+                    {replaced_item: 'this'},
                     {template_content: '</li> '}
                   ]
                 },
@@ -299,7 +299,7 @@ describe Handlebars::Parser do
         expect(parser.parse('Hi }{{ hey }}')).to eq({
           block_items: [
             {template_content: 'Hi }'},
-            {helper_name: 'hey'}
+            {replaced_item: 'hey'}
           ]
         })
       end
@@ -308,7 +308,7 @@ describe Handlebars::Parser do
         expect(parser.parse('}{{ hey }}')).to eq({
           block_items: [
             {template_content: '}'},
-            {helper_name: 'hey'}
+            {replaced_item: 'hey'}
           ]
         })
       end
