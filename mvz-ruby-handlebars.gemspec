@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('parslet', ['~> 2.0'])
 
-  s.add_development_dependency('pry', ['~> 0.13.1'])
+  s.add_development_dependency('pry', '~> 0.14.0')
   s.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.12'])
   s.add_development_dependency('rake', ['~> 13.0'])
   s.add_development_dependency('rspec', ['~> 3.10'])
