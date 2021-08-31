@@ -117,6 +117,11 @@ describe Handlebars::Handlebars do
         expect(evaluate("{{{add left '&' right}}}", {left: 'Law', right: 'Order'})).to eq("Law & Order")
       end
 
+      it 'with optional arguments not specified' do
+        hbs.register_helper('rainbow') {|context, *opts| "-"}
+        expect(evaluate("{{rainbow}}")).to eq("-")
+      end
+
       it 'with an empty string argument' do
         hbs.register_helper('noah') {|context, value| value.to_s.gsub(/a/, '')}
 
