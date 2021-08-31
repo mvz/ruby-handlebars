@@ -2,7 +2,6 @@ module Handlebars
   class Context
     def initialize(hbs, data)
       @hbs = hbs
-      @locals = {}
       @data = data
     end
 
