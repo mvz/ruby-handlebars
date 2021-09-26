@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version = Handlebars::VERSION
 
   s.rubygems_version = '>= 1.6.1'
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.6'
 
   s.authors = ['Vincent Pretre', 'Hiptest R&D', 'Matijs van Zuijlen']
   s.date = '2019-05-13'
