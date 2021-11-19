@@ -1,40 +1,39 @@
 # frozen_string_literal: true
 
-require File.join(File.dirname(__FILE__), 'lib/ruby-handlebars/version.rb')
+require_relative "lib/ruby-handlebars/version"
 
-Gem::Specification.new do |s|
-  s.name = 'mvz-ruby-handlebars'
-  s.version = Handlebars::VERSION
+Gem::Specification.new do |spec|
+  spec.name = 'mvz-ruby-handlebars'
+  spec.version = Handlebars::VERSION
+  spec.authors = ['Vincent Pretre', 'Hiptest R&D', 'Matijs van Zuijlen']
+  spec.email = ['matijs@matijs.net']
 
-  s.rubygems_version = '>= 1.6.1'
-  s.required_ruby_version = '>= 2.6'
+  spec.summary = 'Pure Ruby library for Handlebars templates'
+  spec.homepage = 'https://github.com/mvz/ruby-handlebars'
+  spec.license = "MIT"
+  spec.required_ruby_version = '>= 2.6'
 
-  s.authors = ['Vincent Pretre', 'Hiptest R&D', 'Matijs van Zuijlen']
-  s.date = '2019-05-13'
-  s.email = 'matijs@matijs.net'
-  s.extra_rdoc_files = [
+  spec.metadata["rubygems_mfa_required"] = "true"
+
+  spec.extra_rdoc_files = [
     'LICENSE',
     'README.md'
   ]
 
-  s.files = Dir['{lib,spec}/**/*',
+  spec.files = Dir['{lib,spec}/**/*',
                 '*.md',
                 'Gemfile',
                 'Rakefile',
                 'LICENSE'] & `git ls-files -z`.split("\0")
 
-  s.homepage = 'https://github.com/mvz/ruby-handlebars'
-  s.rubygems_version = '3.0.3'
-  s.summary = 'Pure Ruby library for Handlebars templates'
+  spec.require_paths = ['lib']
 
-  s.add_runtime_dependency('parslet', ['~> 2.0'])
+  spec.add_runtime_dependency('parslet', ['~> 2.0'])
 
-  s.add_development_dependency('pry', '~> 0.14.0')
-  s.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.12'])
-  s.add_development_dependency('rake', ['~> 13.0'])
-  s.add_development_dependency('rspec', ['~> 3.10'])
-  s.add_development_dependency('rspec-mocks', ['~> 3.10'])
-  s.add_development_dependency('simplecov')
-
-  s.require_paths = ['lib']
+  spec.add_development_dependency('pry', '~> 0.14.0')
+  spec.add_development_dependency('pry-stack_explorer', ['~> 0.4', '>= 0.4.12'])
+  spec.add_development_dependency('rake', ['~> 13.0'])
+  spec.add_development_dependency('rspec', ['~> 3.10'])
+  spec.add_development_dependency('rspec-mocks', ['~> 3.10'])
+  spec.add_development_dependency('simplecov')
 end
