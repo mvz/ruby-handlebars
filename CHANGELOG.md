@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.11 (2022-01-21)
+
+* Drop support for Ruby 2.4 and 2.5
+* Add support for Ruby 3.1
+
 ## 0.0.10 (2021-08-31)
 
 * Pull in upstream master. See
