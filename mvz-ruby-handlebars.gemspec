@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = 'Pure Ruby library for Handlebars templates'
   spec.homepage = 'https://github.com/mvz/ruby-handlebars'
   spec.license = "MIT"
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.0.0'
 
   spec.metadata["rubygems_mfa_required"] = "true"
 
