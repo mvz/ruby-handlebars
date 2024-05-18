@@ -14,10 +14,10 @@ module Handlebars
     rule(:eq)          { str("=")}
 
 
-    rule(:docurly)     { ocurly >> ocurly }
-    rule(:dccurly)     { ccurly >> ccurly }
-    rule(:tocurly)     { ocurly >> ocurly >> ocurly }
-    rule(:tccurly)     { ccurly >> ccurly >> ccurly }
+    rule(:docurly)     { str("{{") }
+    rule(:dccurly)     { str("}}") }
+    rule(:tocurly)     { str("{{{") }
+    rule(:tccurly)     { str("}}}") }
 
     rule(:else_kw)     { str("else") }
     rule(:as_kw)       { str("as") }
