@@ -1,7 +1,7 @@
 ruby-handlebars
 ===============
 
-[![Build Status](https://travis-ci.org/mvz/ruby-handlebars.svg?branch=master)](https://travis-ci.org/mvz/ruby-handlebars)
+[![Build status](https://github.com/mvz/ruby-handlebars/actions/workflows/ruby.yml/badge.svg)](https://github.com/mvz/ruby-handlebars/actions/workflows/ruby.yml)
 
 Pure Ruby library for [Handlebars](http://handlebarsjs.com/) template system.
 This should become an alternative for using the Handlebars javascript library via
