@@ -1,10 +1,10 @@
-require_relative 'default_helper'
+require_relative "default_helper"
 
 module Handlebars
   module Helpers
     class UnlessHelper < DefaultHelper
       def self.registry_name
-        'unless'
+        "unless"
       end
 
       def self.apply(context, condition, block, else_block)

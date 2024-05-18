@@ -1,10 +1,10 @@
-require_relative 'default_helper'
+require_relative "default_helper"
 
 module Handlebars
   module Helpers
     class WithHelper < DefaultHelper
       def self.registry_name
-        'with'
+        "with"
       end
 
       def self.apply(context, data, block, else_block)

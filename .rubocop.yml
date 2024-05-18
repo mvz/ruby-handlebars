@@ -1,0 +1,7 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0
+
+# Do not commit to use of interpolation
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

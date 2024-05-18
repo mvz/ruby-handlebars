@@ -1,4 +1,4 @@
-require_relative 'context'
+require_relative "context"
 
 module Handlebars
   class Template

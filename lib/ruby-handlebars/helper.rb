@@ -1,4 +1,4 @@
-require_relative 'tree'
+require_relative "tree"
 
 module Handlebars
   class Helper

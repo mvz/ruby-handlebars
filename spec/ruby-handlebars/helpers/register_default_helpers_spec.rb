@@ -1,12 +1,12 @@
-require_relative '../../spec_helper'
+require_relative "../../spec_helper"
 
-require_relative '../../../lib/ruby-handlebars'
-require_relative '../../../lib/ruby-handlebars/helpers/register_default_helpers'
+require_relative "../../../lib/ruby-handlebars"
+require_relative "../../../lib/ruby-handlebars/helpers/register_default_helpers"
 
 
 describe Handlebars::Helpers do
-  context '.register_default_helpers' do
-    it 'registers the default helpers' do
+  context ".register_default_helpers" do
+    it "registers the default helpers" do
       hbs = double(Handlebars::Handlebars)
       allow(hbs).to receive(:register_helper)
       allow(hbs).to receive(:register_as_helper)
@@ -17,18 +17,18 @@ describe Handlebars::Helpers do
       expect(hbs)
         .to have_received(:register_helper)
         .once
-        .with('if')
+        .with("if")
         .once
-        .with('unless')
+        .with("unless")
         .once
-        .with('each')
+        .with("each")
         .once
-        .with('helperMissing')
+        .with("helperMissing")
 
       expect(hbs)
         .to have_received(:register_as_helper)
         .once
-        .with('each')
+        .with("each")
     end
   end
 end

@@ -1,9 +1,9 @@
-require_relative '../../spec_helper'
-require_relative './shared'
+require_relative "../../spec_helper"
+require_relative "./shared"
 
-require_relative '../../../lib/ruby-handlebars'
-require_relative '../../../lib/ruby-handlebars/tree'
-require_relative '../../../lib/ruby-handlebars/helpers/each_helper'
+require_relative "../../../lib/ruby-handlebars"
+require_relative "../../../lib/ruby-handlebars/tree"
+require_relative "../../../lib/ruby-handlebars/helpers/each_helper"
 
 
 describe Handlebars::Helpers::EachHelper do
@@ -13,55 +13,55 @@ describe Handlebars::Helpers::EachHelper do
 
   it_behaves_like "a registerable helper", "each"
 
-  context '.apply' do
+  context ".apply" do
     include_context "shared apply helper"
 
-    let(:values) { [Handlebars::Tree::String.new('a'), Handlebars::Tree::String.new('b'), Handlebars::Tree::String.new('c') ]}
+    let(:values) { [Handlebars::Tree::String.new("a"), Handlebars::Tree::String.new("b"), Handlebars::Tree::String.new("c") ]}
 
-    it 'applies the block on all values' do
+    it "applies the block on all values" do
       subject.apply(ctx, values, block, else_block)
 
       expect(block).to have_received(:fn).exactly(3).times
       expect(else_block).not_to have_received(:fn)
     end
 
-    context 'when values is nil' do
+    context "when values is nil" do
       let(:values) { nil }
 
-      it 'uses the else_block if provided' do
+      it "uses the else_block if provided" do
         subject.apply(ctx, values, block, else_block)
 
         expect(block).not_to have_received(:fn)
         expect(else_block).to have_received(:fn).once
       end
 
-      it 'returns nil if no else_block is provided' do
+      it "returns nil if no else_block is provided" do
         expect(subject.apply(ctx, values, block, nil)).to be nil
       end
     end
 
-    context 'when values is empty' do
+    context "when values is empty" do
       let(:values) { [] }
 
-      it 'uses the else_block if provided' do
+      it "uses the else_block if provided" do
         subject.apply(ctx, values, block, else_block)
 
         expect(block).not_to have_received(:fn)
         expect(else_block).to have_received(:fn).once
       end
 
-      it 'returns nil if no else_block is provided' do
+      it "returns nil if no else_block is provided" do
         expect(subject.apply(ctx, values, block, nil)).to be nil
       end
     end
   end
 
-  context 'integration' do
+  context "integration" do
     include_context "shared helpers integration tests"
 
-    let(:ducks) {[{name: 'Huey'}, {name: 'Dewey'}, {name: 'Louis'}]}
+    let(:ducks) {[{name: "Huey"}, {name: "Dewey"}, {name: "Louis"}]}
 
-    it 'simple case' do
+    it "simple case" do
       template = [
         "<ul>",
         "{{#each items}}  <li>{{this.name}}</li>",
@@ -84,7 +84,7 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'considers not found items as an empty list and does not raise an error' do
+    it "considers not found items as an empty list and does not raise an error" do
       template = [
         "<ul>",
         "{{#each stuff}}  <li>{{this.name}}</li>",
@@ -97,7 +97,7 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'considers not found items as an empty list and uses else block if provided' do
+    it "considers not found items as an empty list and uses else block if provided" do
       template = [
         "<ul>",
         "{{#each stuff}}  <li>{{this.name}}</li>",
@@ -112,7 +112,7 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'works with non-hash data' do
+    it "works with non-hash data" do
       template = [
         "<ul>",
         "{{#each items}}  <li>{{this.name}}</li>",
@@ -135,7 +135,7 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'using an else statement' do
+    it "using an else statement" do
       template = [
         "<ul>",
         "{{#each items}}  <li>{{this.name}}</li>",
@@ -160,17 +160,17 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'imbricated' do
+    it "imbricated" do
       data = {people: [
         {
-          name: 'Huey',
-          email: 'huey@junior-woodchucks.example.com',
-          phones: ['1234', '5678'],
+          name: "Huey",
+          email: "huey@junior-woodchucks.example.com",
+          phones: ["1234", "5678"],
         },
         {
-          name: 'Dewey',
-          email: 'dewey@junior-woodchucks.example.com',
-          phones: ['4321'],
+          name: "Dewey",
+          email: "dewey@junior-woodchucks.example.com",
+          phones: ["4321"],
         }
       ]}
 
@@ -215,8 +215,8 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    context 'special variables' do
-      it '@first' do
+    context "special variables" do
+      it "@first" do
         template = [
           "{{#each items}}",
           "{{this}}",
@@ -228,7 +228,7 @@ describe Handlebars::Helpers::EachHelper do
         expect(evaluate(template, {items: %w(a b c)})).to eq("a first\nb\nc\n")
       end
 
-      it '@last' do
+      it "@last" do
         template = [
           "{{#each items}}",
           "{{this}}",
@@ -240,7 +240,7 @@ describe Handlebars::Helpers::EachHelper do
         expect(evaluate(template, {items: %w(a b c)})).to eq("a\nb\nc last\n")
       end
 
-      it '@index' do
+      it "@index" do
         template = [
           "{{#each items}}",
           "{{this}} {{@index}}\n",
@@ -254,9 +254,9 @@ describe Handlebars::Helpers::EachHelper do
   context 'integration with "as |value|" notation' do
     include_context "shared helpers integration tests"
 
-    let(:ducks) {[{name: 'Huey'}, {name: 'Dewey'}, {name: 'Louis'}]}
+    let(:ducks) {[{name: "Huey"}, {name: "Dewey"}, {name: "Louis"}]}
 
-    it 'simple case' do
+    it "simple case" do
       template = [
         "<ul>",
         "{{#each items as |item|}}  <li>{{item.name}}</li>",
@@ -273,17 +273,17 @@ describe Handlebars::Helpers::EachHelper do
       ].join("\n"))
     end
 
-    it 'imbricated' do
+    it "imbricated" do
       data = {people: [
         {
-          name: 'Huey',
-          email: 'huey@junior-woodchucks.example.com',
-          phones: ['1234', '5678'],
+          name: "Huey",
+          email: "huey@junior-woodchucks.example.com",
+          phones: ["1234", "5678"],
         },
         {
-          name: 'Dewey',
-          email: 'dewey@junior-woodchucks.example.com',
-          phones: ['4321'],
+          name: "Dewey",
+          email: "dewey@junior-woodchucks.example.com",
+          phones: ["4321"],
         }
       ]}
 

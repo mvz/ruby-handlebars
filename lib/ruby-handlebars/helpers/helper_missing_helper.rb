@@ -1,4 +1,4 @@
-require_relative 'default_helper'
+require_relative "default_helper"
 
 module Handlebars
   class UnknownHelper < StandardError
@@ -7,7 +7,7 @@ module Handlebars
   module Helpers
     class HelperMissingHelper < DefaultHelper
       def self.registry_name
-        'helperMissing'
+        "helperMissing"
       end
 
       def self.apply(context, name, block, else_block)

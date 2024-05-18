@@ -1,17 +1,17 @@
-require 'parslet'
+require "parslet"
 
 module Handlebars
   class Parser < Parslet::Parser
     rule(:space)       { match('\s').repeat(1) }
     rule(:space?)      { space.maybe }
-    rule(:dot)         { str('.') }
-    rule(:gt)          { str('>')}
-    rule(:hash)        { str('#')}
-    rule(:slash)       { str('/')}
-    rule(:ocurly)      { str('{')}
-    rule(:ccurly)      { str('}')}
-    rule(:pipe)        { str('|')}
-    rule(:eq)          { str('=')}
+    rule(:dot)         { str(".") }
+    rule(:gt)          { str(">")}
+    rule(:hash)        { str("#")}
+    rule(:slash)       { str("/")}
+    rule(:ocurly)      { str("{")}
+    rule(:ccurly)      { str("}")}
+    rule(:pipe)        { str("|")}
+    rule(:eq)          { str("=")}
 
 
     rule(:docurly)     { ocurly >> ocurly }
@@ -19,14 +19,14 @@ module Handlebars
     rule(:tocurly)     { ocurly >> ocurly >> ocurly }
     rule(:tccurly)     { ccurly >> ccurly >> ccurly }
 
-    rule(:else_kw)     { str('else') }
-    rule(:as_kw)       { str('as') }
+    rule(:else_kw)     { str("else") }
+    rule(:as_kw)       { str("as") }
 
     rule(:identifier)  { (else_kw >> space? >> dccurly).absent? >> match['@\-a-zA-Z0-9_\?'].repeat(1) }
     rule(:directory)   { (else_kw >> space? >> dccurly).absent? >> match['@\-a-zA-Z0-9_\/\?'].repeat(1) }
     rule(:path)        { identifier >> (dot >> (identifier | else_kw)).repeat }
 
-    rule(:nocurly)     { match('[^{}]') }
+    rule(:nocurly)     { match("[^{}]") }
     rule(:eof)         { any.absent? }
     rule(:template_content) {
       (
@@ -47,7 +47,7 @@ module Handlebars
       (as_kw >> space? >> pipe).absent? >>
       (
         (path | string).as(:parameter_name) |
-        (str('(') >> space? >> identifier.as(:safe_helper_name) >> (space? >> parameters.as(:parameters)).maybe >> space? >> str(')'))
+        (str("(") >> space? >> identifier.as(:safe_helper_name) >> (space? >> parameters.as(:parameters)).maybe >> space? >> str(")"))
       )
     }
     rule(:parameters)  { parameter >> (space >> parameter).repeat }
