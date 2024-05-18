@@ -26,13 +26,12 @@ module Handlebars
     rule(:directory)   { (else_kw >> space? >> dccurly).absent? >> match['@\-a-zA-Z0-9_\/\?'].repeat(1) }
     rule(:path)        { identifier >> (dot >> (identifier | else_kw)).repeat }
 
-    rule(:nocurly)     { match("[^{}]") }
+    rule(:noocurly)    { match("[^{]") }
     rule(:eof)         { any.absent? }
     rule(:template_content) {
       (
-        nocurly.repeat(1)                  | # A sequence of non-curlies
-        ocurly >> (nocurly | ccurly | eof) | # Opening curly that doesn't start a {{}}
-        ccurly                               # A closing curly outside a {{}}
+        noocurly.repeat(1) |       # A sequence of non-opening-curlies
+        ocurly >> (noocurly | eof) # Opening curly that doesn't start a {{}}
       ).repeat(1).as(:template_content) }
 
     rule(:unsafe_replacement) { docurly >> space? >> path.as(:replaced_unsafe_item) >> space? >> dccurly }
