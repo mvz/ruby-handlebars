@@ -6,7 +6,7 @@ module Handlebars
     end
 
     def get(path)
-      items = path.split('.'.freeze)
+      items = path.split(".".freeze)
       if locals.key? items.first.to_sym
         current = locals
       else

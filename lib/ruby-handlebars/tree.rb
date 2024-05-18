@@ -1,4 +1,4 @@
-require 'parslet'
+require "parslet"
 
 module Handlebars
   module Tree
@@ -51,7 +51,7 @@ module Handlebars
       def _eval(context)
         helper = context.get_helper(name.to_s)
         if helper.nil?
-          context.get_helper('helperMissing').apply(context, String.new(name.to_s))
+          context.get_helper("helperMissing").apply(context, String.new(name.to_s))
         else
           helper.apply(context, parameters, block, else_block)
         end
@@ -62,7 +62,7 @@ module Handlebars
       def _eval(context)
         helper = context.get_as_helper(name.to_s)
         if helper.nil?
-          context.get_helper('helperMissing').apply(context, String.new(name.to_s))
+          context.get_helper("helperMissing").apply(context, String.new(name.to_s))
         else
           helper.apply_as(context, parameters, as_parameters, block, else_block)
         end

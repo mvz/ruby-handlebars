@@ -1,8 +1,8 @@
-require_relative '../../spec_helper'
-require_relative './shared'
+require_relative "../../spec_helper"
+require_relative "./shared"
 
-require_relative '../../../lib/ruby-handlebars'
-require_relative '../../../lib/ruby-handlebars/helpers/if_helper'
+require_relative "../../../lib/ruby-handlebars"
+require_relative "../../../lib/ruby-handlebars/helpers/if_helper"
 
 
 describe Handlebars::Helpers::IfHelper do
@@ -12,23 +12,23 @@ describe Handlebars::Helpers::IfHelper do
 
   it_behaves_like "a registerable helper", "if"
 
-  context '.apply' do
-    it_behaves_like "a helper running the main block", 'true', true
-    it_behaves_like "a helper running the main block", 'a non-empty string', 'something'
-    it_behaves_like "a helper running the main block", 'a non-empty list', ['a']
-    it_behaves_like "a helper running the main block", 'a non-empty hash', {a: 'b'}
+  context ".apply" do
+    it_behaves_like "a helper running the main block", "true", true
+    it_behaves_like "a helper running the main block", "a non-empty string", "something"
+    it_behaves_like "a helper running the main block", "a non-empty list", ["a"]
+    it_behaves_like "a helper running the main block", "a non-empty hash", {a: "b"}
 
     it_behaves_like "a helper running the else block", "false", false
     it_behaves_like "a helper running the else block", "an empty string", ""
     it_behaves_like "a helper running the else block", "an empty list", []
     it_behaves_like "a helper running the else block", "an empty hash", {}
 
-    context 'when else_block is not present' do
+    context "when else_block is not present" do
       include_context "shared apply helper"
       let(:params) { false }
       let(:else_block) { nil }
 
-      it 'returns an empty-string' do
+      it "returns an empty-string" do
         expect(subject.apply(ctx, params, block, else_block)).to eq("")
 
         expect(block).not_to have_received(:fn)
@@ -37,11 +37,11 @@ describe Handlebars::Helpers::IfHelper do
     end
   end
 
-  context 'integration' do
+  context "integration" do
     include_context "shared helpers integration tests"
 
-    context 'if' do
-      it 'without else' do
+    context "if" do
+      it "without else" do
         template = [
           "{{#if condition}}",
           "  Show something",
@@ -51,7 +51,7 @@ describe Handlebars::Helpers::IfHelper do
         expect(evaluate(template, {condition: false})).to eq("")
       end
 
-      it 'with an else' do
+      it "with an else" do
         template = [
           "{{#if condition}}",
           "  Show something",
@@ -63,7 +63,7 @@ describe Handlebars::Helpers::IfHelper do
         expect(evaluate(template, {condition: false})).to eq("\n  Do not show something\n")
       end
 
-      it 'imbricated ifs' do
+      it "imbricated ifs" do
         template = [
           "{{#if first_condition}}",
           "  {{#if second_condition}}",

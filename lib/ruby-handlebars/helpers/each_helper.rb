@@ -1,10 +1,10 @@
-require_relative 'default_helper'
+require_relative "default_helper"
 
 module Handlebars
   module Helpers
     class EachHelper < DefaultHelper
       def self.registry_name
-        'each'
+        "each"
       end
 
       def self.apply(context, items, block, else_block)
@@ -21,7 +21,7 @@ module Handlebars
             result = items.each_with_index.map do |item, index|
               context.add_items(name => item, :@index => index, :@first => (index == 0), :@last => (index == items.length - 1))
               block.fn(context)
-            end.join('')
+            end.join("")
           end
         end
         result

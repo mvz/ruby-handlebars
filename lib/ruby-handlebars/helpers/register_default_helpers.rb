@@ -1,8 +1,8 @@
-require_relative 'each_helper'
-require_relative 'helper_missing_helper'
-require_relative 'if_helper'
-require_relative 'unless_helper'
-require_relative 'with_helper'
+require_relative "each_helper"
+require_relative "helper_missing_helper"
+require_relative "if_helper"
+require_relative "unless_helper"
+require_relative "with_helper"
 
 module Handlebars
   module Helpers
