@@ -219,11 +219,6 @@ Lint/UnusedMethodArgument:
     - 'lib/ruby-handlebars/tree.rb'
 
 # Configuration parameters: CountComments, CountAsOne, AllowedMethods, AllowedPatterns.
-# AllowedMethods: refine
-Metrics/BlockLength:
-  Max: 419
-
-# Configuration parameters: CountComments, CountAsOne, AllowedMethods, AllowedPatterns.
 Metrics/MethodLength:
   Max: 13
 

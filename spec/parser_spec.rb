@@ -445,6 +445,14 @@ describe Handlebars::Parser do
         })
       end
 
+      it "works with single empty curly pair" do
+        expect(parser.parse("Hi {} hey")).to eq({
+          block_items: [
+            {template_content: "Hi {} hey"}
+          ]
+        })
+      end
+
       it "works with closing curly before value at the start" do
         expect(parser.parse("}{{ hey }}")).to eq({
           block_items: [
