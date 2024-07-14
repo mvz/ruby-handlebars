@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency("parslet", ["~> 2.0"])
+  spec.add_dependency("parslet", ["~> 2.0"])
 
   spec.add_development_dependency("pry", "~> 0.14.0")
   spec.add_development_dependency("pry-stack_explorer", ["~> 0.4", ">= 0.4.12"])
