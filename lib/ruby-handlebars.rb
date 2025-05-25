@@ -2,6 +2,7 @@ require_relative "ruby-handlebars/version"
 require_relative "ruby-handlebars/context"
 require_relative "ruby-handlebars/parser"
 require_relative "ruby-handlebars/tree"
+require_relative "ruby-handlebars/transform"
 require_relative "ruby-handlebars/template"
 require_relative "ruby-handlebars/helper"
 require_relative "ruby-handlebars/helpers/register_default_helpers"
@@ -15,6 +16,8 @@ module Handlebars
       @as_helpers = {}
       @helpers = {}
       @partials = {}
+      @parser = Parser.new
+      @transform = Transform.new
 
       register_default_helpers
       set_escaper
@@ -54,11 +57,10 @@ module Handlebars
 
     private
 
-    PARSER = Parser.new
-    TRANSFORM = Transform.new
+    attr_reader :parser, :transform
 
     def template_to_ast(content)
-      TRANSFORM.apply(PARSER.parse(content))
+      transform.apply(parser.parse(content))
     end
 
     def register_default_helpers
