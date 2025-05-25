@@ -15,6 +15,8 @@ module Handlebars
       @as_helpers = {}
       @helpers = {}
       @partials = {}
+      @parser = Parser.new
+      @transform = Transform.new
 
       register_default_helpers
       set_escaper
@@ -54,11 +56,10 @@ module Handlebars
 
     private
 
-    PARSER = Parser.new
-    TRANSFORM = Transform.new
+    attr_reader :parser, :transform
 
     def template_to_ast(content)
-      TRANSFORM.apply(PARSER.parse(content))
+      transform.apply(parser.parse(content))
     end
 
     def register_default_helpers
