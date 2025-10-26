@@ -2,6 +2,17 @@
 
 This is the changelog for mvz-ruby-handlebars
 
+## 0.0.13 (2024-10-26)
+
+* Support Ruby 3.2 through 3.4, dropping support for Ruby 3.0 and 3.1
+  ([#40] and [#43] by [mvz])
+* Remove large dynamic object constants `Handlebars::Handlebars::PARSER` and
+  `Handlebars::Handlebars::TRANSFORM` ([#42] by [mvz])
+
+[#40]: https://github.com/mvz/ruby-handlebars/pull/40
+[#42]: https://github.com/mvz/ruby-handlebars/pull/42
+[#43]: https://github.com/mvz/ruby-handlebars/pull/43
+
 ## 0.0.12 (2024-05-18)
 
 * Support Ruby 3.0 through 3.3, dropping support for 2.6 and 2.7
