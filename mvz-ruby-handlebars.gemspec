@@ -31,10 +31,4 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency("parslet", ["~> 2.0"])
-
-  spec.add_development_dependency("rake", ["~> 13.0"])
-  spec.add_development_dependency("rspec", ["~> 3.10"])
-  spec.add_development_dependency("rspec-mocks", ["~> 3.10"])
-  spec.add_development_dependency("rubocop", "~> 1.63")
-  spec.add_development_dependency("simplecov")
 end
