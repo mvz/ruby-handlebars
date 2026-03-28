@@ -106,7 +106,7 @@ module Handlebars
       dccurly
     }
 
-    rule(:block_item) { (template_content | unsafe_replacement | safe_replacement | helper | partial | block_helper | as_block_helper) }
+    rule(:block_item) { template_content | unsafe_replacement | safe_replacement | helper | partial | block_helper | as_block_helper }
     rule(:block) { block_item.repeat.as(:block_items) }
 
     root :block
